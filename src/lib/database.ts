@@ -68,7 +68,7 @@ export const insertContactMessage = async (message: { name: string; email: strin
     // Extract meaningful error message
     let errorMessage = 'Unknown error';
     if (error && typeof error === 'object' && 'message' in error) {
-      errorMessage = error.message || 'Database operation failed';
+      errorMessage = (error as any).message || 'Database operation failed';
     }
     
     throw new Error(`Failed to save contact message: ${errorMessage}`);
