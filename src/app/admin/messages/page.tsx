@@ -4,15 +4,9 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import AdminLayout from '@/components/AdminLayout';
 import { getContactMessages, updateMessageReadStatus, deleteContactMessage } from '@/lib/database';
+import { Database } from '@/types/database.types';
 
-interface ContactMessage {
-  id: string;
-  name: string;
-  email: string;
-  message: string;
-  created_at: string;
-  is_read: boolean;
-}
+type ContactMessage = Database['public']['Tables']['contact_messages']['Row'];
 
 export default function MessagesPage() {
   const [messages, setMessages] = useState<ContactMessage[]>([]);
