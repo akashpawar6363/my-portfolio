@@ -76,7 +76,7 @@ export const insertContactMessage = async (message: { name: string; email: strin
 }
 
 // Get all contact messages (admin only)
-export const getContactMessages = async (limit?: number) => {
+export const getContactMessages = async (limit?: number): Promise<ContactMessage[]> => {
   let query = supabase
     .from('contact_messages')
     .select('*')
@@ -93,7 +93,7 @@ export const getContactMessages = async (limit?: number) => {
     throw new Error('Failed to fetch contact messages')
   }
 
-  return data || []
+  return (data || []) as ContactMessage[]
 }
 
 // Get message statistics
