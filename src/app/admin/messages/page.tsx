@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import AdminLayout from '@/components/AdminLayout';
 import { getContactMessages, updateMessageReadStatus, deleteContactMessage } from '@/lib/database';
@@ -8,7 +8,7 @@ import { Database } from '@/types/database.types';
 
 type ContactMessage = Database['public']['Tables']['contact_messages']['Row'];
 
-export default function MessagesPage() {
+function MessagesContent() {
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'read' | 'unread'>('all');
@@ -362,5 +362,27 @@ export default function MessagesPage() {
         )}
       </div>
     </AdminLayout>
+  );
+}
+
+export default function MessagesPage() {
+  return (
+    <Suspense fallback={
+      <AdminLayout>
+        <div className="space-y-6">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-200 dark:bg-slate-700 rounded w-48 mb-4"></div>
+            <div className="h-10 bg-gray-200 dark:bg-slate-700 rounded mb-4"></div>
+            <div className="space-y-4">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="h-24 bg-gray-200 dark:bg-slate-700 rounded"></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </AdminLayout>
+    }>
+      <MessagesContent />
+    </Suspense>
   );
 }
